@@ -1,0 +1,21 @@
+.boxes {
+    widows: 100px;
+    
+}
+.side{
+    height:300px
+}
+
+.green{
+    padding:5px;
+    background-color: green;
+}
+.orange {
+    padding:5px;
+    background-color: orange;
+}
+.red {
+    padding:5px;
+    background-color: red;
+}
+
