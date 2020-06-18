@@ -8,4 +8,5 @@ This projects main premise was for me to become more comfortable with Api system
  
  # use
  - enter city name - do not include state
- -press enter to see 6 day forecast 
+ - press enter to see 6 day forecast 
+![](/pictures/picture1.png)
