@@ -14,24 +14,31 @@ var runThrough = ["holder", day2, day3,day4, day5, day6];
 
 
 var apiKey = "c480ec8f6386f2259313f00160a140e1";
+starter()
 
+// activates history button
+$(".gogo").on("click", function(){
+ var searcher = $(this).text()
+ wholeThing(searcher)
 
+});
 
-
-// api.openweathermap.org/data/2.5/weather?q={city name}&appid={your api key}
+// press to search city 
 searchIt.on("click", function (event) {
     event.preventDefault()
     var enterHere = $("#enterHere").val();
     console.log(enterHere)
+    // add history button
     var newButton = $("<button>").text(enterHere)
+    newButton.addClass("gogo")
     buttonAdd.append(newButton)
     wholeThing(enterHere)
 });
 
-
+// function to pull city
 function wholeThing(searchCity){
     var queryUrl2 = "https://api.openweathermap.org/data/2.5/weather?q=" + searchCity + "&appid=" + apiKey
-
+    localStorage.setItem("plan1", JSON.stringify(searchCity));
 
     $.ajax({
         url: queryUrl2,
@@ -45,13 +52,15 @@ function wholeThing(searchCity){
             url: "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat.toString() + "&lon=" + lon.toString() + "&exclude=hourly&appid=" + apiKey,
             method: "GET"
         }).then(function (weatherData) {
-
+            // eppending api data to areas of the HTML
             day1.text("")
-            //cloud.attr("img", weatherData.daily[0].weather[0].icon+".png")
-            day1.append($("<h1>").text(weatherData.daily[0].weather[0].icon))
-            var temp = ($("<p>").text("Temperature: " + weatherData.daily[0].temp.day))
+            var dateString = moment.unix(weatherData.daily[0].dt).format("MM/DD/YYYY");
+            
+            day1.append($("<h1>").text(searchCity + " " + dateString))
+            
+            var temp = ($("<p>").html("Temperature: " + (parseInt(weatherData.daily[0].temp.day-273.15)*1.8+32) + "&#176"+"F"))
             day1.append(temp)
-            var Humidity = ($("<p>").text("Humidity: " + weatherData.daily[0].humidity))
+            var Humidity = ($("<p>").text("Humidity: " + weatherData.daily[0].humidity + "%"))
             day1.append(Humidity)
             var wind = ($("<p>").text("Wind-speed: " + weatherData.daily[0].wind_speed + "MPH"))
             day1.append(wind)
@@ -70,19 +79,25 @@ function wholeThing(searchCity){
             for (var i = 1; i <= 5; i++) {
                 console.log("for loop")
                 runThrough[i].text("")
+                dateString = moment.unix(weatherData.daily[i].dt).format("MM/DD/YYYY");
+                runThrough[i].append($("<img>").attr("src",  "http://openweathermap.org/img/wn/" + weatherData.daily[0].weather[0].icon + "@2x.png"))
+                runThrough[i].append($("<p>").text(dateString))
                 runThrough[i].append($("<h1>").text(weatherData.daily[i].weather[0].icon.png))
-                var temp = ($("<p>").text("Temperature: " + weatherData.daily[i].temp.day))
+                var temp = ($("<p>").html("Temp:" + (parseInt(weatherData.daily[0].temp.day-273.15)*1.8+32) + "&#176"+"F"))
                 runThrough[i].append(temp)
-                var Humidity = ($("<p>").text("Humidity: " + weatherData.daily[i].humidity))
+                var Humidity = ($("<p>").text("Humid:" + weatherData.daily[i].humidity + "%"))
                 runThrough[i].append(Humidity)
-                var wind = ($("<p>").text("Wind-speed: " + weatherData.daily[i].wind_speed + "MPH"))
-                runThrough[i].append(wind)
-
+                
 
 
             };
         });
     });
+}
+// function to load last visited page from local storage upon reload
+function starter(){
+    var startUp = JSON.parse(localStorage.getItem("plan1"));
+    wholeThing(startUp)
 }
 
 });
