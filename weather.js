@@ -17,7 +17,7 @@ var apiKey = "c480ec8f6386f2259313f00160a140e1";
 starter()
 
 // activates history button
-$(".gogo").on("click", function(){
+$(document).on("click", ".gogo", function(){
  var searcher = $(this).text()
  wholeThing(searcher)
 
